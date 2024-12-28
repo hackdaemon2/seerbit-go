@@ -1,0 +1,13 @@
+logs/
+*.log
+.DS_Store
+Thumbs.db
+.env
+dist/
+build/
+vendor/
+.vscode/
+.idea/
+*.tmp
+*.swp
+*~

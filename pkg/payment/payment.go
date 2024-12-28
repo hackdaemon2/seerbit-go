@@ -50,7 +50,7 @@ func (paymentEngine *PaymentEngine) ProcessPayment(
 		return model.PaymentResponse{}, fmt.Errorf(constant.ERROR_MESSAGE, err)
 	}
 
-	shouldReturn, paymentError, err := util.IsErrorResponse(resp, errorResponse)
+	shouldReturn, paymentError, err := httpRequest.IsErrorResponse(resp, errorResponse)
 	if shouldReturn {
 		return paymentError.(model.ErrorResponse), err
 	}

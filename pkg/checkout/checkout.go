@@ -1,4 +1,4 @@
-package standardcheckout
+package checkout
 
 import (
 	"errors"
@@ -23,7 +23,7 @@ func NewCheckout(client *client.SeerBitClient) *Checkout {
 }
 
 func (checkout *Checkout) Pay(payload any) (any, error) {
-	checkoutPayload, ok := payload.(CheckoutPayload)
+	checkoutPayload, ok := payload.(model.CheckoutPayload)
 	if !ok {
 		return nil, errors.New("invalid payload for Standard Checkout")
 	}
@@ -52,7 +52,7 @@ func (checkout *Checkout) Pay(payload any) (any, error) {
 		return nil, fmt.Errorf(constant.ERROR_MESSAGE, err)
 	}
 
-	shouldReturn, checkoutError, err := util.IsErrorResponse(resp, errorResponse)
+	shouldReturn, checkoutError, err := httpRequest.IsErrorResponse(resp, errorResponse)
 	if shouldReturn {
 		return checkoutError, err
 	}
@@ -66,12 +66,12 @@ func (checkout *Checkout) Pay(payload any) (any, error) {
 	return hashResponse, nil
 }
 
-func (checkout *Checkout) handleSuccessHash(hashResponse model.PaymentResponse, payload CheckoutPayload) (any, error) {
+func (checkout *Checkout) handleSuccessHash(hashResponse model.PaymentResponse, payload model.CheckoutPayload) (any, error) {
 	var checkoutResponse model.PaymentResponse
 	var errorResponse model.ErrorResponse
 
 	hash := hashResponse.Data.Hash.Hash
-	hashedPayload := &CheckoutHashPayload{
+	hashedPayload := model.CheckoutHashPayload{
 		CheckoutPayload: payload,
 		Hash:            hash,
 		HashType:        constant.SEERBIT_HASH_TYPE,
@@ -94,7 +94,7 @@ func (checkout *Checkout) handleSuccessHash(hashResponse model.PaymentResponse, 
 		return nil, fmt.Errorf(constant.ERROR_MESSAGE, err)
 	}
 
-	shouldReturn, checkoutError, err := util.IsErrorResponse(resp, errorResponse)
+	shouldReturn, checkoutError, err := httpRequest.IsErrorResponse(resp, errorResponse)
 	if shouldReturn {
 		return checkoutError, err
 	}

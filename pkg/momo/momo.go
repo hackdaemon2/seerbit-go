@@ -5,6 +5,7 @@ import (
 
 	"github.com/hackdaemon2/seerbit-go/pkg/client"
 	"github.com/hackdaemon2/seerbit-go/pkg/constant"
+	"github.com/hackdaemon2/seerbit-go/pkg/model"
 	"github.com/hackdaemon2/seerbit-go/pkg/payment"
 )
 
@@ -21,7 +22,7 @@ func NewMobileMoney(client *client.SeerBitClient) *MobileMoney {
 }
 
 func (momo *MobileMoney) Pay(payload any) (any, error) {
-	mobileMoneyPayload, ok := payload.(MobileMoneyPayload)
+	mobileMoneyPayload, ok := payload.(model.MobileMoneyPayload)
 	if !ok {
 		return nil, errors.New("invalid payload for MOMO")
 	}

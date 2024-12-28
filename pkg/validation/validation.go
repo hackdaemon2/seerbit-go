@@ -13,7 +13,13 @@ import (
 )
 
 type Validation struct {
-	Client client.SeerBitClient
+	Client *client.SeerBitClient
+}
+
+func NewValidation(client *client.SeerBitClient) *Validation {
+	return &Validation{
+		Client: client,
+	}
 }
 
 func (validation *Validation) Verify(reference string) (any, error) {
@@ -41,7 +47,7 @@ func (validation *Validation) Verify(reference string) (any, error) {
 		return nil, fmt.Errorf(constant.ERROR_MESSAGE, err)
 	}
 
-	shouldReturn, verifyErr, err := util.IsErrorResponse(resp, verifyErrorResponse)
+	shouldReturn, verifyErr, err := httpRequest.IsErrorResponse(resp, verifyErrorResponse)
 	if shouldReturn {
 		return verifyErr, err
 	}
@@ -75,7 +81,7 @@ func (validation *Validation) Validate(payload model.ValidationPayload) (any, er
 		return nil, fmt.Errorf(constant.ERROR_MESSAGE, err)
 	}
 
-	shouldReturn, validationErr, err := util.IsErrorResponse(resp, validationErrorResponse)
+	shouldReturn, validationErr, err := httpRequest.IsErrorResponse(resp, validationErrorResponse)
 	if shouldReturn {
 		return validationErr, err
 	}

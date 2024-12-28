@@ -66,7 +66,7 @@ func (card *Card) Tokenize(payload model.CardPayload) (any, error) {
 		return nil, fmt.Errorf(constant.ERROR_MESSAGE, err)
 	}
 
-	shouldReturn, checkoutError, err := util.IsErrorResponse(resp, errorResponse)
+	shouldReturn, checkoutError, err := httpRequest.IsErrorResponse(resp, errorResponse)
 	if shouldReturn {
 		return checkoutError, err
 	}
@@ -112,9 +112,9 @@ func (card *Card) GetSubscription(billingId string) (any, error) {
 		return nil, fmt.Errorf(constant.ERROR_MESSAGE, err)
 	}
 
-	shouldReturn, checkoutError, err := util.IsErrorResponse(resp, errorResponse)
+	shouldReturn, subscriptionErrResponse, err := httpRequest.IsErrorResponse(resp, errorResponse)
 	if shouldReturn {
-		return checkoutError, err
+		return subscriptionErrResponse, err
 	}
 
 	log.Println("subscription list successfully retrieved.")

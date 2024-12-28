@@ -25,12 +25,12 @@ func NewOrder(client *client.SeerBitClient) *Order {
 	}
 }
 
-func (order *Order) Create(orderPayload OrderPaymentPayload) (any, error) {
+func (order *Order) Create(orderPayload model.OrderPaymentPayload) (any, error) {
 	url := order.Client.BaseUrl + "/payments/order"
 	return order.executeRequest(orderPayload, url, http.MethodPost)
 }
 
-func (order *Order) PostCreate(orderPayload OrderPostPaymentPayload) (any, error) {
+func (order *Order) PostCreate(orderPayload model.OrderPostPaymentPayload) (any, error) {
 	url := order.Client.BaseUrl + PRODUCT_ORDERS_ENDPOINT
 	return order.executeRequest(orderPayload, url, http.MethodPost)
 }
@@ -50,7 +50,7 @@ func (order *Order) GetOrdersByOrderId(orderId string) (any, error) {
 	return order.executeRequest(nil, url, http.MethodGet)
 }
 
-func (order *Order) Update(orderPayload OrderPostPaymentPayload) (any, error) {
+func (order *Order) Update(orderPayload model.OrderPostPaymentPayload) (any, error) {
 	url := order.Client.BaseUrl + PRODUCT_ORDERS_ENDPOINT
 	return order.executeRequest(orderPayload, url, http.MethodPut)
 }
@@ -104,7 +104,7 @@ func (order *Order) executeRequest(orderPayload any, url, method string) (any, e
 		return nil, fmt.Errorf("error making request: %w", err)
 	}
 
-	shouldReturn, orderErr, err := util.IsErrorResponse(resp, errorResponse)
+	shouldReturn, orderErr, err := httpRequest.IsErrorResponse(resp, errorResponse)
 	if shouldReturn {
 		return orderErr, err
 	}

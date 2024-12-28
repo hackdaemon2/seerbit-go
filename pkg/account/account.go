@@ -26,7 +26,7 @@ func NewAccount(client *client.SeerBitClient) *Account {
 }
 
 func (account *Account) Pay(payload any) (any, error) {
-	accountPayload, ok := payload.(AccountPayload)
+	accountPayload, ok := payload.(model.AccountPayload)
 	if !ok {
 		return nil, errors.New("invalid payload for Account")
 	}
@@ -54,7 +54,7 @@ func (account *Account) GetBanks() (any, error) {
 		return nil, fmt.Errorf(constant.ERROR_MESSAGE, err)
 	}
 
-	shouldReturn, checkoutError, err := util.IsErrorResponse(resp, errorResponse)
+	shouldReturn, checkoutError, err := httpRequest.IsErrorResponse(resp, errorResponse)
 	if shouldReturn {
 		return checkoutError, err
 	}

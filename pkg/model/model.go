@@ -138,7 +138,7 @@ type CardPayload struct {
 	Amount             string `json:"amount,omitempty"`
 	Fee                string `json:"fee,omitempty"`
 	FullName           string `json:"fullName,omitempty"`
-	MobileNumber       int64  `json:"mobileNumber,omitempty"`
+	MobileNumber       string `json:"mobileNumber,omitempty"`
 	Currency           string `json:"currency,omitempty"`
 	Country            string `json:"country,omitempty"`
 	PaymentReference   string `json:"paymentReference,omitempty"`
@@ -159,7 +159,10 @@ type CardPayload struct {
 	ExpiryYear         string `json:"expiryYear,omitempty"`
 	Pin                string `json:"pin,omitempty"`
 	Source             string `json:"source,omitempty"`
+	StartDate          string `json:"startDate,omitempty"`
 	Retry              string `json:"retry,omitempty"`
+	CardName           string `json:"cardName,omitempty"`
+	Type               string `json:"type,omitempty"`
 	InvoiceNumber      string `json:"invoiceNumber,omitempty"`
 	IsCvv              string `json:"isCvv,omitempty"`
 	PlanId             string `json:"planId,omitempty"`
@@ -172,4 +175,97 @@ type CardPayload struct {
 type ValidationPayload struct {
 	LinkingReference string `json:"linkingReference"`
 	Otp              string `json:"otp"`
+}
+
+type MobileMoneyPayload struct {
+	FullName           string `json:"fullName,omitempty"`
+	Email              string `json:"email,omitempty"`
+	MobileNumber       string `json:"mobileNumber,omitempty"`
+	PublicKey          string `json:"publicKey,omitempty"`
+	PaymentReference   string `json:"paymentReference,omitempty"`
+	DeviceType         string `json:"deviceType,omitempty"`
+	SourceIP           string `json:"sourceIP,omitempty"`
+	Currency           string `json:"currency,omitempty"`
+	ProductDescription string `json:"productDescription,omitempty"`
+	Country            string `json:"country,omitempty"`
+	Network            string `json:"network,omitempty"`
+	VoucherCode        string `json:"voucherCode,omitempty"`
+	Fee                string `json:"fee,omitempty"`
+	Amount             string `json:"amount,omitempty"`
+	ProductId          string `json:"productId,omitempty"`
+	PaymentType        string `json:"paymentType,omitempty"`
+}
+
+type AccountPayload struct {
+	PublicKey          string `json:"publicKey"`
+	Amount             string `json:"amount"`
+	Fee                string `json:"fee"`
+	FullName           string `json:"fullName"`
+	MobileNumber       string `json:"mobileNumber"`
+	Currency           string `json:"currency"`
+	Country            string `json:"country"`
+	PaymentReference   string `json:"paymentReference"`
+	Email              string `json:"email"`
+	ProductId          string `json:"productId"`
+	ProductDescription string `json:"productDescription"`
+	ClientAppCode      string `json:"clientAppCode"`
+	ChannelType        string `json:"channelType"`
+	RedirectUrl        string `json:"redirectUrl"`
+	CallbackUrl        string `json:"callbackUrl"`
+	PaymentType        string `json:"paymentType"`
+	DeviceType         string `json:"deviceType"`
+	SourceIP           string `json:"sourceIP"`
+	AccountName        string `json:"accountName"`
+	AccountNumber      string `json:"accountNumber"`
+	BankCode           string `json:"bankCode"`
+	BVN                string `json:"bvn"`
+	DateOfBirth        string `json:"dateOfBirth"`
+	Retry              string `json:"retry"`
+	InvoiceNumber      string `json:"invoiceNumber"`
+}
+
+type OrderData struct {
+	OrderID            string `json:"orderId,omitempty"`
+	Currency           string `json:"currency,omitempty"`
+	Amount             string `json:"amount,omitempty"`
+	ProductID          string `json:"productId,omitempty"`
+	ProductDescription string `json:"productDescription,omitempty"`
+}
+
+type OrderPaymentPayload struct {
+	Email            string      `json:"email,omitempty"`
+	PublicKey        string      `json:"publicKey,omitempty"`
+	PaymentReference string      `json:"paymentReference,omitempty"`
+	FullName         string      `json:"fullName,omitempty"`
+	OrderType        string      `json:"orderType,omitempty"`
+	MobileNumber     string      `json:"mobileNumber,omitempty"`
+	CallbackURL      string      `json:"callbackUrl,omitempty"`
+	Country          string      `json:"country,omitempty"`
+	Currency         string      `json:"currency,omitempty"`
+	Amount           string      `json:"amount,omitempty"`
+	Orders           []OrderData `json:"orders,omitempty"`
+}
+
+type OrderPostPaymentPayload struct {
+	PublicKey        string      `json:"publicKey,omitempty"`
+	PaymentReference string      `json:"paymentReference,omitempty"`
+	Orders           []OrderData `json:"orders,omitempty"`
+}
+
+type CheckoutHashPayload struct {
+	CheckoutPayload
+	Hash     string `json:"hash,omitempty"`
+	HashType string `json:"hashType,omitempty"`
+}
+
+type CheckoutPayload struct {
+	PublicKey          string `json:"publicKey,omitempty"`
+	Amount             string `json:"amount,omitempty"`
+	Currency           string `json:"currency,omitempty"`
+	Country            string `json:"country,omitempty"`
+	PaymentReference   string `json:"paymentReference,omitempty"`
+	Email              string `json:"email,omitempty"`
+	ProductId          string `json:"productId,omitempty"`
+	ProductDescription string `json:"productDescription,omitempty"`
+	CallbackUrl        string `json:"callbackUrl,omitempty"`
 }

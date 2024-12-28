@@ -49,76 +49,70 @@ Instantiate a client and set the parameters.
   package main
 
   import (
-      "encoding/json"
-      "fmt"
-      "log"
+    "encoding/json"
+    "fmt"
+    "log"
 
-      "github.com/hackdaemon2/seerbit-go/account"
-      "github.com/hackdaemon2/seerbit-go/client"
-      "github.com/hackdaemon2/seerbit-go/model"
+    "github.com/hackdaemon2/seerbit-go/pkg/account"
+    "github.com/hackdaemon2/seerbit-go/pkg/client"
+    "github.com/hackdaemon2/seerbit-go/pkg/model"
   )
 
   func main() {
-      seerBitClient, err := client.NewSeerBitClient("your_public_key", "your_private_key")
-      if err != nil {
-          log.Fatalf("Failed to initialize SeerBit client: %v", err)
-      }
+    processSeerBitPayment()
+  }
 
-      accountPayload := &account.AccountPayload{
-          PublicKey:         "your_public_key",
-          Amount:            "100.00",
-          Fee:               "10.00",
-          FullName:          "John Doe",
-          MobileNumber:      "08037456590",
-          Currency:          "NGN",
-          Country:           "NG",
-          PaymentReference:  "paymentRef",
-          Email:             "johndoe@gmail.com",
-          ProductID:         "Foods",
-          ProductDescription: "Uba Account Transaction",
-          ClientAppCode:     "kpp64",
-          ChannelType:       "BANK_ACCOUNT",
-          RedirectUrl:       "https://checkout.seerbit.com",
-          DeviceType:        "Apple Laptop",
-          SourceIP:          "127.0.0.1:3456",
-          AccountName:       "John S Doe",
-          AccountNumber:     "1234567890",
-          BankCode:          "033",
-          BVN:               "12345678901",
-          DateOfBirth:       "04011984",
-          Retry:             "false",
-          InvoiceNumber:     "1234567891abc123ac",
-      }
+  func processSeerBitPayment() {
+    seerBitClient, err := client.NewSeerBitClient("your_public_key", "your_private_key")
+    if err != nil {
+      log.Fatalf("Failed to initialize SeerBit client: %v", err)
+    }
 
-      accountInstance := account.NewAccount(seerBitClient)
+    checkout := checkout.NewCheckout(seerBitClient)
+    cardPayload := model.CheckoutPayload{
+      PublicKey:          seerBitClient.PublicKey,
+      Amount:             "100.00",
+      Currency:           "NGN",
+      Country:            "NG",
+      PaymentReference:   "paymentRef",
+      Email:              "johndoe@gmail.com",
+      ProductId:          "Foods",
+      ProductDescription: "Checkout Payment Transaction",
+    }
 
-      response, err := accountInstance.Pay(accountPayload)
-      if err != nil {
-          log.Fatalf("Error making payment: %v", err)
-      }
+    response, err := checkout.Pay(cardPayload)
+    if err != nil {
+      log.Fatalf("Error making payment: %v", err)
+    }
 
-      switch resp := response.(type) {
-      case model.PaymentResponse:
-          printJson(resp)
-      case model.ErrorResponse:
-          log.Printf("Payment failed: %v", resp)
-      default:
-          log.Printf("Unexpected response type: %T", resp)
+    switch resp := response.(type) {
+    case model.PaymentResponse:
+      if resp.Data.Code == constant.SEERBIT_PENDING_CODE || resp.Data.Code == constant.SEERBIT_SUCCESS_CODE {
+        printJson(resp)
+        log.Printf("redirect link => %s", resp.Data.Payment.RedirectLink)
+      } else {
+        log.Printf("Payment failed: %v", resp)
       }
+    case model.ErrorResponse:
+      log.Printf("Payment failed: %v", resp)
+    default:
+      log.Printf("Unexpected response type: %T", resp)
+    }
   }
 
   func printJson(response any) {
-      jsonResponse, err := json.Marshal(response)
-      if err != nil {
-          log.Printf("Error marshalling JSON: %v", err)
-          return
-      }
-      fmt.Println(string(jsonResponse))
+    jsonResponse, err := json.Marshal(response)
+    if err != nil {
+      log.Printf("Error marshalling JSON: %v", err)
+      return
+    }
+    fmt.Println(string(jsonResponse))
   }
+
 ```
 
 Find more examples [here](https://github.com/hackdaemon2/seerbit-go/tree/master/demos).
 
 ## Licence
 
-GNU General Public License. For more information, see the LICENSE file.
+The MIT License (MIT). For more information, see the LICENSE file.

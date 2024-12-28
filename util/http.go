@@ -57,7 +57,7 @@ func (h *HttpRequestData) setAuthentication(client *resty.Request) {
 	}
 }
 
-func IsErrorResponse(resp *resty.Response, errResponse model.ErrorResponse) (bool, any, error) {
+func (h *HttpRequestData) IsErrorResponse(resp *resty.Response, errResponse model.ErrorResponse) (bool, any, error) {
 	if resp.StatusCode() != http.StatusOK || len(errResponse.Error) != 0 {
 		return true, errResponse, nil
 	}

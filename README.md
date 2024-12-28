@@ -52,18 +52,26 @@ Instantiate a client and set the parameters.
     "encoding/json"
     "fmt"
     "log"
+    "os"
 
+    "github.com/joho/godotenv"
     "github.com/hackdaemon2/seerbit-go/pkg/account"
     "github.com/hackdaemon2/seerbit-go/pkg/client"
     "github.com/hackdaemon2/seerbit-go/pkg/model"
   )
+
+  func init() {
+    if err := godotenv.Load(".env"); err != nil {
+      log.Fatal("Error loading .env file")
+    }
+  }
 
   func main() {
     processSeerBitPayment()
   }
 
   func processSeerBitPayment() {
-    seerBitClient, err := client.NewSeerBitClient("your_public_key", "your_private_key")
+    seerBitClient, err := client.NewSeerBitClient(os.Getenv("SEERBIT_PUBLIC_KEY"), os.Getenv("SEERBIT_PRIVATE_KEY"))
     if err != nil {
       log.Fatalf("Failed to initialize SeerBit client: %v", err)
     }

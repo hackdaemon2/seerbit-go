@@ -4,7 +4,6 @@ import (
 	"log"
 
 	"github.com/hackdaemon2/seerbit-go/pkg/client"
-	"github.com/hackdaemon2/seerbit-go/pkg/constant"
 	"github.com/hackdaemon2/seerbit-go/pkg/model"
 	"github.com/hackdaemon2/seerbit-go/pkg/order"
 )
@@ -52,7 +51,7 @@ func ProcessCreateOrderPrePaymentDemo() {
 
 	switch resp := response.(type) {
 	case model.PaymentResponse:
-		if resp.Data.Code == constant.SEERBIT_PENDING_CODE || resp.Data.Code == constant.SEERBIT_SUCCESS_CODE {
+		if resp.Data.Code == client.SEERBIT_PENDING_CODE || resp.Data.Code == client.SEERBIT_SUCCESS_CODE {
 			log.Printf("redirect link => %s", resp.Data.Payment.RedirectLink)
 		} else {
 			log.Printf("Payment failed: %v", resp)

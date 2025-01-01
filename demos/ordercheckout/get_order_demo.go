@@ -4,16 +4,14 @@ import (
 	"log"
 
 	"github.com/hackdaemon2/seerbit-go/pkg/client"
-	"github.com/hackdaemon2/seerbit-go/pkg/constant"
 	"github.com/hackdaemon2/seerbit-go/pkg/model"
 	"github.com/hackdaemon2/seerbit-go/pkg/order"
 )
 
 const (
-	REQUEST_FAILED_ERR = "Requuest failed: %v"
-	PUBLIC_KEY         = "your_public_key"
-	PRIVATE_KEY        = "your_private_key"
-
+	REQUEST_FAILED_ERR        = "Requuest failed: %v"
+	PUBLIC_KEY                = "your_public_key"
+	PRIVATE_KEY               = "your_private_key"
 	INITIALIZATION_ERROR      = "Failed to initialize SeerBit client: %v"
 	UNEXPECTED_RESPONSE_ERROR = "Unexpected response type: %T"
 )
@@ -33,7 +31,7 @@ func GetOrderPaymentRefDemo() {
 
 	switch resp := response.(type) {
 	case model.PaymentResponse:
-		if resp.Data.Code == constant.SEERBIT_SUCCESS_CODE {
+		if resp.Data.Code == client.SEERBIT_SUCCESS_CODE {
 			log.Println("successful")
 		} else {
 			log.Printf(REQUEST_FAILED_ERR, resp)
@@ -61,7 +59,7 @@ func GetOrdersDemo() {
 
 	switch resp := response.(type) {
 	case model.PaymentResponse:
-		if resp.Data.Code == constant.SEERBIT_SUCCESS_CODE {
+		if resp.Data.Code == client.SEERBIT_SUCCESS_CODE {
 			log.Println("successful")
 		} else {
 			log.Printf(REQUEST_FAILED_ERR, resp)
@@ -89,7 +87,7 @@ func GetOrderOrderIdDemo() {
 
 	switch resp := response.(type) {
 	case model.PaymentResponse:
-		if resp.Data.Code == constant.SEERBIT_SUCCESS_CODE {
+		if resp.Data.Code == client.SEERBIT_SUCCESS_CODE {
 			log.Println("successful")
 		} else {
 			log.Printf(REQUEST_FAILED_ERR, resp)

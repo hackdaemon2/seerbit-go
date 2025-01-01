@@ -4,7 +4,6 @@ import (
 	"log"
 
 	"github.com/hackdaemon2/seerbit-go/pkg/client"
-	"github.com/hackdaemon2/seerbit-go/pkg/constant"
 	"github.com/hackdaemon2/seerbit-go/pkg/model"
 	"github.com/hackdaemon2/seerbit-go/pkg/order"
 )
@@ -25,7 +24,7 @@ func ProcessUpdateOrderDemo() {
 
 	switch resp := response.(type) {
 	case model.PaymentResponse:
-		if resp.Data.Code == constant.SEERBIT_SUCCESS_CODE {
+		if resp.Data.Code == client.SEERBIT_SUCCESS_CODE {
 			log.Println("successful")
 		} else {
 			log.Printf("Request failed: %v", resp)

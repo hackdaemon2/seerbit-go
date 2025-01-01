@@ -4,7 +4,6 @@ import (
 	"log"
 
 	"github.com/hackdaemon2/seerbit-go/pkg/client"
-	"github.com/hackdaemon2/seerbit-go/pkg/constant"
 	"github.com/hackdaemon2/seerbit-go/pkg/model"
 	"github.com/hackdaemon2/seerbit-go/pkg/momo"
 	"github.com/hackdaemon2/seerbit-go/pkg/validation"
@@ -42,7 +41,7 @@ func ProcessMomoPayment() {
 
 	switch resp := response.(type) {
 	case model.PaymentResponse:
-		if resp.Data.Code == constant.SEERBIT_PENDING_CODE {
+		if resp.Data.Code == client.SEERBIT_PENDING_CODE {
 			log.Printf("linking reference => %s", resp.Data.Payment.LinkingReference)
 		}
 	case model.ErrorResponse:
@@ -71,7 +70,7 @@ func ProcessValidateMomo() {
 
 	switch resp := response.(type) {
 	case model.PaymentResponse:
-		if resp.Data.Code == constant.SEERBIT_SUCCESS_CODE {
+		if resp.Data.Code == client.SEERBIT_SUCCESS_CODE {
 			log.Printf("payment successful => %s", resp.Data.Code)
 		}
 	case model.ErrorResponse:

@@ -11,6 +11,111 @@ type PaymentResponseData struct {
 	Subscription  Subscription    `json:"subscriptions,omitempty"`
 	MerchantBanks []MerchantBanks `json:"merchantBanks,omitempty"`
 	Products      []OrderProducts `json:"products,omitempty"`
+	Payload       []Payload       `json:"payload,omitempty"`
+}
+
+type Payload struct {
+	ID                        int             `json:"id,omitempty"`
+	FullName                  string          `json:"fullName,omitempty"`
+	PublicKey                 string          `json:"publicKey,omitempty"`
+	Processor                 string          `json:"processor,omitempty"`
+	PaymentType               string          `json:"paymentType,omitempty"`
+	ShopperReference          string          `json:"shopperReference,omitempty"`
+	Amount                    decimal.Decimal `json:"amount,omitempty"`
+	ProductID                 string          `json:"productId,omitempty"`
+	ProductDescription        string          `json:"productDescription,omitempty"`
+	Email                     string          `json:"email,omitempty"`
+	Quantity                  int             `json:"quantity,omitempty"`
+	MaskedPan                 string          `json:"maskedPan,omitempty"`
+	Gateway                   string          `json:"gateway,omitempty"`
+	GatewayMessage            string          `json:"gatewayMessage,omitempty"`
+	GatewayCode               string          `json:"gatewayCode,omitempty"`
+	TransactionRef            string          `json:"transactionRef,omitempty"`
+	GatewayRef                string          `json:"gatewayRef,omitempty"`
+	BusinessName              string          `json:"businessName,omitempty"`
+	Fee                       decimal.Decimal `json:"fee,omitempty"`
+	Mode                      string          `json:"mode,omitempty"`
+	CallbackUrl               string          `json:"callbackUrl,omitempty"`
+	RedirectUrl               string          `json:"redirectUrl,omitempty"`
+	ChannelType               string          `json:"channelType,omitempty"`
+	PaymentKey                string          `json:"paymentKey,omitempty"`
+	SourceIP                  string          `json:"sourceIP,omitempty"`
+	DeviceType                string          `json:"deviceType,omitempty"`
+	ClientAppCode             string          `json:"clientAppCode,omitempty"`
+	CardBin                   string          `json:"cardBin,omitempty"`
+	LastFourDigits            string          `json:"lastFourDigits,omitempty"`
+	Type                      string          `json:"type,omitempty"`
+	LinkingReference          string          `json:"linkingreference,omitempty"`
+	Country                   string          `json:"country,omitempty"`
+	Currency                  string          `json:"currency,omitempty"`
+	SmsProvider               string          `json:"smsProvider,omitempty"`
+	CustomerID                string          `json:"customerId,omitempty"`
+	InternalReference         string          `json:"internalreference,omitempty"`
+	AccountNumber             string          `json:"accountNumber,omitempty"`
+	Narration                 string          `json:"narration,omitempty"`
+	CreditAccountName         string          `json:"creditAccountName,omitempty"`
+	TransferType              string          `json:"transferType,omitempty"`
+	PaymentReference          string          `json:"paymentReference,omitempty"`
+	BatchID                   string          `json:"batchId,omitempty"`
+	SessionID                 string          `json:"sessionId,omitempty"`
+	BankName                  string          `json:"bankName,omitempty"`
+	CreditAccountNumber       string          `json:"creditAccountNumber,omitempty"`
+	BankCode                  string          `json:"bankCode,omitempty"`
+	AlternatePaymentReference string          `json:"alternatePaymentReference,omitempty"`
+	SettlementCode            string          `json:"settlementCode,omitempty"`
+	SettlementMessage         string          `json:"settlementMessage,omitempty"`
+	SettlementTime            string          `json:"settlementTime,omitempty"`
+	OrderStatusCode           string          `json:"orderStatusCode,omitempty"`
+	OrderStatusMessage        string          `json:"orderStatusMessage,omitempty"`
+	Status                    string          `json:"status,omitempty"`
+	MobileNumber              string          `json:"mobileNumber,omitempty"`
+	DateOfBirth               string          `json:"dateOfBirth,omitempty"`
+	BranchPhoneNumber         string          `json:"branchPhoneNumber,omitempty"`
+	TransferredAmount         float64         `json:"transferedAmount,omitempty"`
+	ScheduleID                string          `json:"scheduleId,omitempty"`
+	IsCardInternational       string          `json:"isCardInternational,omitempty"`
+	Reason                    string          `json:"reason,omitempty"`
+	Retry                     bool            `json:"retry,omitempty"`
+	MetaData                  any             `json:"metaData,omitempty"`
+	Event                     []any           `json:"event,omitempty"`
+	Order                     []any           `json:"order,omitempty"`
+	CreatedAt                 string          `json:"createdAt,omitempty"`
+	UpdatedAt                 string          `json:"updatedAt,omitempty"`
+	CardName                  string          `json:"cardName,omitempty"`
+	IsNigerianCard            string          `json:"isNigeriancard,omitempty"`
+	CardCountry               string          `json:"cardCountry,omitempty"`
+	IntCurrency               string          `json:"intCurrency,omitempty"`
+	Rate                      decimal.Decimal `json:"rate,omitempty"`
+	InCardProcessingFee       decimal.Decimal `json:"inCardProcessingFee,omitempty"`
+	IntAmountCharge           decimal.Decimal `json:"intAmountCharge,omitempty"`
+	ProcessorCode             string          `json:"processorCode,omitempty"`
+	ProcessorMessage          string          `json:"processorMessage,omitempty"`
+	InvoiceNumber             string          `json:"invoiceNumber,omitempty"`
+	BillID                    string          `json:"billId,omitempty"`
+	LocationPhoneNumber       string          `json:"locationPhoneNumber,omitempty"`
+	PocketReferenceID         string          `json:"pocketReferenceId,omitempty"`
+	TransferAccountType       string          `json:"transferAccountType,omitempty"`
+	Bearer                    string          `json:"bearer,omitempty"`
+	TransLink                 string          `json:"transLink,omitempty"`
+	VendorID                  string          `json:"vendorId,omitempty"`
+	PayLinkEnvironment        string          `json:"payLinkEnvironment,omitempty"`
+	PayLinkStatus             string          `json:"payLinkStatus,omitempty"`
+	PayLinkAmount             decimal.Decimal `json:"payLinkAmount,omitempty"`
+	PayLinkAdditionalData     string          `json:"payLinkAdditionalData,omitempty"`
+	PayLinkName               string          `json:"payLinkName,omitempty"`
+	PayLinkDescription        string          `json:"payLinkDescription,omitempty"`
+	PayLinkRedirectUrl        string          `json:"payLinkRedirectUrl,omitempty"`
+	PayLinkSuccessMessage     string          `json:"payLinkSuccessMessage,omitempty"`
+	PaymentLinkID             string          `json:"paymentLinkId,omitempty"`
+	PayLinkCustomizationName  string          `json:"payLinkCustomizationName,omitempty"`
+	PayLinkFrequency          string          `json:"payLinkFrequency,omitempty"`
+	PayLinkIsOneTimeUse       bool            `json:"payLinkIsOneTimeUse,omitempty"`
+	TerminalID                string          `json:"terminalId,omitempty"`
+	Stan                      string          `json:"stan,omitempty"`
+	TransactionComplete       bool            `json:"transactionComplete,omitempty"`
+	CardExpiryMonth           string          `json:"cardExpiryMonth,omitempty"`
+	CardExpiryYear            string          `json:"cardExpiryYear,omitempty"`
+	Tokenize                  bool            `json:"tokenize,omitempty"`
 }
 
 type Subscription struct {
@@ -51,7 +156,9 @@ type PaymentData struct {
 	Reference          string           `json:"reference,omitempty"`
 	RedirectUrl        string           `json:"redirectUrl,omitempty"`
 	Amount             string           `json:"amount,omitempty"`
+	AuthorizationCode  string           `json:"authorizationCode,omitempty"`
 	WalletName         string           `json:"walletName,omitempty"`
+	Wallet             string           `json:"wallet,omitempty"`
 	BankName           string           `json:"bankName,omitempty"`
 	AccountNumber      string           `json:"accountNumber,omitempty"`
 	Reason             string           `json:"reason,omitempty"`
@@ -96,8 +203,10 @@ type CustomerData struct {
 }
 
 type PaymentResponse struct {
-	Status string              `json:"status"`
-	Data   PaymentResponseData `json:"data"`
+	Status  string              `json:"status,omitempty"`
+	Message string              `json:"message,omitempty"`
+	Error   string              `json:"error,omitempty"`
+	Data    PaymentResponseData `json:"data,omitempty"`
 }
 
 type ErrorResponse struct {
@@ -131,6 +240,13 @@ type PreauthorizationPayload struct {
 	Country            string `json:"country,omitempty"`
 	PaymentReference   string `json:"paymentReference,omitempty"`
 	ProductDescription string `json:"productDescription,omitempty"`
+}
+
+type ChargeToken struct {
+	PublicKey         string `json:"publicKey,omitempty"`
+	Amount            string `json:"amount,omitempty"`
+	PaymentReference  string `json:"paymentReference,omitempty"`
+	AuthorizationCode string `json:"authorizationCode,omitempty"`
 }
 
 type CardPayload struct {
@@ -268,4 +384,15 @@ type CheckoutPayload struct {
 	ProductId          string `json:"productId,omitempty"`
 	ProductDescription string `json:"productDescription,omitempty"`
 	CallbackUrl        string `json:"callbackUrl,omitempty"`
+	Tokenize           string `json:"tokenize,omitempty"`
+}
+
+type VirtualAccountPayload struct {
+	PublicKey              string `json:"publicKey,omitempty"`
+	FullName               string `json:"fullName,omitempty"`
+	BankVerificationNumber string `json:"bankVerificationNumber,omitempty"`
+	Currency               string `json:"currency,omitempty"`
+	Country                string `json:"country,omitempty"`
+	Reference              string `json:"reference,omitempty"`
+	Email                  string `json:"email,omitempty"`
 }

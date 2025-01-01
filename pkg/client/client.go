@@ -7,10 +7,10 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/hackdaemon2/seerbit-go/pkg/constant"
 	"github.com/hackdaemon2/seerbit-go/util"
 )
 
+// SeerBitClient handles configuration settings.
 type SeerBitClient struct {
 	PublicKey     string
 	PrivateKey    string
@@ -20,6 +20,14 @@ type SeerBitClient struct {
 }
 
 // NewSeerBitClient creates a new Client instance with required fields
+//
+// Parameters:
+// - publicKey: An instance of SeerBitClient to handle API interactions.
+// - privateKey: An instance of SeerBitClient to handle API interactions.
+//
+// Returns:
+// - (SeerBitClient): A pointer to the initialized SeerBitClient struct.
+// - (error): An error if the payload is invalid or the payment processing fails.
 func NewSeerBitClient(publicKey, privateKey string) (*SeerBitClient, error) {
 	if publicKey == "" {
 		return nil, errors.New("public key must be set")
@@ -32,7 +40,7 @@ func NewSeerBitClient(publicKey, privateKey string) (*SeerBitClient, error) {
 	client := &SeerBitClient{
 		PublicKey:  publicKey,
 		PrivateKey: privateKey,
-		BaseUrl:    constant.SEERBIT_BASE_URL,
+		BaseUrl:    SEERBIT_BASE_URL,
 	}
 
 	err := client.initialize()
@@ -40,11 +48,20 @@ func NewSeerBitClient(publicKey, privateKey string) (*SeerBitClient, error) {
 }
 
 // initialize initializes the client and sets the BearerToken
+//
+// Parameters:
+// - client (*SeerBitClient): An instance of SeerBitClient to handle API interactions.
+//
+// Returns:
+// - (SeerBitClient): A pointer to the initialized SeerBitClient struct.
+// - (error): An error if the payload is invalid or the payment processing fails.
 func (client *SeerBitClient) initialize() error {
 	if client.isInitialised {
 		log.Println("Client is already initialized.")
 		return nil
 	}
+
+	client.isInitialised = true
 
 	var authResp authResponse
 	var authErrResp authErrorResponse
@@ -56,10 +73,10 @@ func (client *SeerBitClient) initialize() error {
 		PrivateKey:    client.PrivateKey,
 		PublicKey:     client.PublicKey,
 		Payload:       authPayload,
-		Response:      authResp,
-		ErrorResponse: authErrResp,
+		Response:      &authResp,
+		ErrorResponse: &authErrResp,
 		Url:           url,
-		AuthType:      constant.NoAuth,
+		AuthType:      string(NoAuth),
 	}
 
 	resp, err := httpRequest.HttpPost()
@@ -67,7 +84,7 @@ func (client *SeerBitClient) initialize() error {
 		return fmt.Errorf("error making request: %w", err)
 	}
 
-	if resp.StatusCode() == http.StatusOK && authResp.Data.Code == constant.SEERBIT_SUCCESS_CODE {
+	if resp.StatusCode() == http.StatusOK && authResp.Data.Code == SEERBIT_SUCCESS_CODE {
 		client.BearerToken = authResp.Data.EncryptedSecKey.EncryptedKey
 		client.isInitialised = true
 		log.Println("Client successfully initialized.")

@@ -2,63 +2,57 @@ package account
 
 import (
 	"errors"
-	"fmt"
-	"log"
-	"strings"
 
 	"github.com/hackdaemon2/seerbit-go/pkg/client"
-	"github.com/hackdaemon2/seerbit-go/pkg/constant"
 	"github.com/hackdaemon2/seerbit-go/pkg/model"
 	"github.com/hackdaemon2/seerbit-go/pkg/payment"
-	"github.com/hackdaemon2/seerbit-go/util"
 )
 
+// Account provides functionality to handle account-related operations,
+// such as initiating payments using SeerBit's payment engine.
+//
+// For more details see https://seerbit.github.io/openapi/#operation/InitiatePayment
 type Account struct {
-	Client        *client.SeerBitClient
-	paymentEngine *payment.PaymentEngine
+	Client        *client.SeerBitClient          // Client instance for interacting with SeerBit APIs.
+	PaymentEngine payment.PaymentEngineProcessor // Payment engine for processing payments.
 }
 
+// NewAccount creates a new Account instance.
+// It initializes the Account with the provided SeerBitClient and a PaymentEngine.
+//
+// Parameters:
+// - client (*client.SeerBitClient): An instance of SeerBitClient to handle API interactions.
+//
+// Returns:
+// - (*Account): A pointer to the initialized Account struct.
 func NewAccount(client *client.SeerBitClient) *Account {
 	return &Account{
 		Client:        client,
-		paymentEngine: payment.NewPaymentEngine(client),
+		PaymentEngine: payment.NewPaymentEngine(client),
 	}
 }
 
+// Pay processes a payment using the Account payment flow.
+//
+// Parameters:
+// - payload: The payment data, expected to be of type model.AccountPayload.
+//
+// Returns:
+// - (any): The response from the payment engine, or nil if an error occurs.
+// - (error): An error if the payload is invalid or the payment processing fails.
+//
+// For more details see https://seerbit.github.io/openapi/#operation/InitiatePayment
 func (account *Account) Pay(payload any) (any, error) {
+	// Validate that the payload is of type model.AccountPayload.
 	accountPayload, ok := payload.(model.AccountPayload)
 	if !ok {
 		return nil, errors.New("invalid payload for Account")
 	}
+
+	// Construct the payment URL using the SeerBit client's base URL.
 	paymentUrl := account.Client.BaseUrl + "/payments/initiates"
-	return account.paymentEngine.ProcessPayment(accountPayload, paymentUrl, constant.SEERBIT_PENDING_CODE, constant.Bearer)
-}
 
-func (account *Account) GetBanks() (any, error) {
-	var getBanksResponse model.PaymentResponse
-	var errorResponse model.ErrorResponse
-
-	getBanksUrl := strings.Join([]string{account.Client.BaseUrl, "/banks/merchant/", account.Client.PublicKey}, "")
-	httpRequest := util.HttpRequestData{
-		Response:       getBanksResponse,
-		ErrorResponse:  errorResponse,
-		Url:            getBanksUrl,
-		PublicKey:      account.Client.PublicKey,
-		PrivateKey:     account.Client.PrivateKey,
-		AuthType:       constant.Bearer,
-		Authentication: account.Client.BearerToken,
-	}
-
-	resp, err := httpRequest.HttpGet()
-	if err != nil {
-		return nil, fmt.Errorf(constant.ERROR_MESSAGE, err)
-	}
-
-	shouldReturn, checkoutError, err := httpRequest.IsErrorResponse(resp, errorResponse)
-	if shouldReturn {
-		return checkoutError, err
-	}
-
-	log.Println("bank list successfully retrieved.")
-	return getBanksResponse, nil
+	// Process the payment using the PaymentEngine.
+	// The SeerBit pending code and authentication type (Bearer) are passed along.
+	return account.PaymentEngine.ProcessPayment(accountPayload, paymentUrl, client.SEERBIT_PENDING_CODE, client.Bearer)
 }

@@ -7,10 +7,13 @@ import (
 	"net/http"
 
 	"github.com/hackdaemon2/seerbit-go/pkg/client"
-	"github.com/hackdaemon2/seerbit-go/pkg/constant"
 	"github.com/hackdaemon2/seerbit-go/pkg/model"
 	"github.com/hackdaemon2/seerbit-go/util"
 )
+
+type PaymentEngineProcessor interface {
+	ProcessPayment(any, string, string, client.AuthType) (any, error)
+}
 
 type PaymentEngine struct {
 	Client *client.SeerBitClient
@@ -23,9 +26,9 @@ func NewPaymentEngine(client *client.SeerBitClient) *PaymentEngine {
 func (paymentEngine *PaymentEngine) ProcessPayment(
 	payload any,
 	paymentUrl, successCode string,
-	authType constant.AuthType) (any, error) {
+	authType client.AuthType) (any, error) {
 	if !paymentEngine.Client.IsInitialized() {
-		return model.PaymentResponse{}, errors.New(constant.INITIALIZATION_ERROR)
+		return model.PaymentResponse{}, errors.New(client.INITIALIZATION_ERROR)
 	}
 
 	var paymentResponse model.PaymentResponse
@@ -33,26 +36,26 @@ func (paymentEngine *PaymentEngine) ProcessPayment(
 
 	httpRequest := util.HttpRequestData{
 		Payload:       payload,
-		Response:      paymentResponse,
-		ErrorResponse: errorResponse,
+		Response:      &paymentResponse,
+		ErrorResponse: &errorResponse,
 		Url:           paymentUrl,
-		AuthType:      authType,
+		AuthType:      string(authType),
 		PrivateKey:    paymentEngine.Client.PrivateKey,
 		PublicKey:     paymentEngine.Client.PublicKey,
 	}
 
-	if authType == constant.Bearer {
+	if authType == client.Bearer {
 		httpRequest.Authentication = paymentEngine.Client.BearerToken
 	}
 
 	resp, err := httpRequest.HttpPost()
 	if err != nil {
-		return model.PaymentResponse{}, fmt.Errorf(constant.ERROR_MESSAGE, err)
+		return nil, fmt.Errorf(client.ERROR_MESSAGE, err)
 	}
 
-	shouldReturn, paymentError, err := httpRequest.IsErrorResponse(resp, errorResponse)
-	if shouldReturn {
-		return paymentError.(model.ErrorResponse), err
+	shouldReturn, _, err := httpRequest.IsErrorResponse(resp, &errorResponse, &paymentResponse)
+	if shouldReturn && len(errorResponse.Error) != 0 {
+		return errorResponse, err
 	}
 
 	if resp.StatusCode() == http.StatusOK && paymentResponse.Data.Code == successCode {

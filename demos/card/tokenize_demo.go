@@ -32,7 +32,7 @@ func ProcessTokenizePayment() {
 		ExpiryYear:         "25",
 	}
 
-	response, err := card.Tokenize(cardPayload)
+	response, err := card.DirectTokenize(cardPayload)
 	if err != nil {
 		log.Fatalf("Error making payment: %v", err)
 	}

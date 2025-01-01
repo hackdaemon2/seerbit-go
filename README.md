@@ -41,7 +41,7 @@ You can also check the [demos](https://github.com/hackdaemon2/seerbit-go/tree/ma
 
 ## Using the Library
 
-### Initiate Account Option
+### Initiate Standard Checkout Payment
 
 Instantiate a client and set the parameters.
 
@@ -55,7 +55,7 @@ Instantiate a client and set the parameters.
     "os"
 
     "github.com/joho/godotenv"
-    "github.com/hackdaemon2/seerbit-go/pkg/account"
+    "github.com/hackdaemon2/seerbit-go/pkg/checkout"
     "github.com/hackdaemon2/seerbit-go/pkg/client"
     "github.com/hackdaemon2/seerbit-go/pkg/model"
   )
@@ -76,7 +76,7 @@ Instantiate a client and set the parameters.
       log.Fatalf("Failed to initialize SeerBit client: %v", err)
     }
 
-    checkout := checkout.NewCheckout(seerBitClient)
+    standardCheckout := checkout.NewCheckout(seerBitClient)
     cardPayload := model.CheckoutPayload{
       PublicKey:          seerBitClient.PublicKey,
       Amount:             "100.00",
@@ -88,16 +88,15 @@ Instantiate a client and set the parameters.
       ProductDescription: "Checkout Payment Transaction",
     }
 
-    response, err := checkout.Pay(cardPayload)
+    response, err := standardCheckout.Pay(cardPayload)
     if err != nil {
       log.Fatalf("Error making payment: %v", err)
     }
 
     switch resp := response.(type) {
     case model.PaymentResponse:
-      if resp.Data.Code == constant.SEERBIT_PENDING_CODE || resp.Data.Code == constant.SEERBIT_SUCCESS_CODE {
-        printJson(resp)
-        log.Printf("redirect link => %s", resp.Data.Payment.RedirectLink)
+      if resp.Data.Code == client.SEERBIT_PENDING_CODE || resp.Data.Code == client.SEERBIT_SUCCESS_CODE {
+        log.Printf("Payment pending: %v", resp)
       } else {
         log.Printf("Payment failed: %v", resp)
       }
@@ -106,15 +105,6 @@ Instantiate a client and set the parameters.
     default:
       log.Printf("Unexpected response type: %T", resp)
     }
-  }
-
-  func printJson(response any) {
-    jsonResponse, err := json.Marshal(response)
-    if err != nil {
-      log.Printf("Error marshalling JSON: %v", err)
-      return
-    }
-    fmt.Println(string(jsonResponse))
   }
 
 ```

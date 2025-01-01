@@ -8,7 +8,6 @@ import (
 
 	"github.com/go-resty/resty/v2"
 	"github.com/hackdaemon2/seerbit-go/pkg/client"
-	"github.com/hackdaemon2/seerbit-go/pkg/constant"
 	"github.com/hackdaemon2/seerbit-go/pkg/model"
 	"github.com/hackdaemon2/seerbit-go/util"
 )
@@ -40,6 +39,7 @@ func (order *Order) GetOrders() (any, error) {
 	return order.executeRequest(nil, url, http.MethodGet)
 }
 
+// API reference https://seerbit.github.io/openapi/#operation/GetOrderByPublicKey
 func (order *Order) GetOrdersByPaymentReference(paymentReference string) (any, error) {
 	url := getOrderReferenceUrl(order, "/paymentReference/", paymentReference)
 	return order.executeRequest(nil, url, http.MethodGet)
@@ -69,7 +69,7 @@ func getOrderReferenceUrl(order *Order, referenceUrlPath, referenceValue string)
 // Common logic for creating and sending HTTP requests
 func (order *Order) executeRequest(orderPayload any, url, method string) (any, error) {
 	if !order.Client.IsInitialized() {
-		return nil, errors.New(constant.INITIALIZATION_ERROR)
+		return nil, errors.New(client.INITIALIZATION_ERROR)
 	}
 
 	var orderResponse model.PaymentResponse
@@ -83,7 +83,7 @@ func (order *Order) executeRequest(orderPayload any, url, method string) (any, e
 		ErrorResponse:  errorResponse,
 		Url:            url,
 		Authentication: order.Client.BearerToken,
-		AuthType:       constant.Bearer,
+		AuthType:       string(client.Bearer),
 	}
 
 	var resp *resty.Response
@@ -104,9 +104,9 @@ func (order *Order) executeRequest(orderPayload any, url, method string) (any, e
 		return nil, fmt.Errorf("error making request: %w", err)
 	}
 
-	shouldReturn, orderErr, err := httpRequest.IsErrorResponse(resp, errorResponse)
-	if shouldReturn {
-		return orderErr, err
+	shouldReturn, _, err := httpRequest.IsErrorResponse(resp, &errorResponse, &orderResponse)
+	if shouldReturn && len(errorResponse.Error) != 0 {
+		return errorResponse, err
 	}
 
 	return orderResponse, nil

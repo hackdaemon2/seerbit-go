@@ -3,9 +3,9 @@ package main
 import (
 	"log"
 
-	"github.com/hackdaemon2/seerbit-go/pkg/card"
 	"github.com/hackdaemon2/seerbit-go/pkg/client"
 	"github.com/hackdaemon2/seerbit-go/pkg/model"
+	"github.com/hackdaemon2/seerbit-go/pkg/recurring"
 )
 
 func GetSubscriptionDemo() {
@@ -14,9 +14,9 @@ func GetSubscriptionDemo() {
 		log.Fatalf("Failed to initialize SeerBit client: %v", err)
 	}
 
-	card := card.NewCard(seerBitClient)
+	subscription := recurring.NewSubscription(seerBitClient)
 
-	response, err := card.GetSubscription("billing-id-REF")
+	response, err := subscription.GetSubscription("billing-id-REF")
 	if err != nil {
 		log.Fatalf("Error making payment: %v", err)
 	}
@@ -30,7 +30,7 @@ func ProcessRecurringSubscription() {
 		log.Fatalf("Failed to initialize SeerBit client: %v", err)
 	}
 
-	card := card.NewCard(seerBitClient)
+	subscription := recurring.NewSubscription(seerBitClient)
 	cardPayload := model.CardPayload{
 		StartDate:          "2020-02-25 00:00:00",
 		PlanId:             "3484839",
@@ -57,7 +57,7 @@ func ProcessRecurringSubscription() {
 		ExpiryYear:         "25",
 	}
 
-	response, err := card.RecurringSubscription(cardPayload)
+	response, err := subscription.RecurringSubscription(cardPayload)
 	if err != nil {
 		log.Fatalf("Error making payment: %v", err)
 	}
